@@ -5,9 +5,6 @@ jeap:
       error-topic-name: jme-messageprocessing-failed
       system-name: JME
       service-name: ${spring.application.name}
-  crypto:
-    awskms:
-      enabled: false
   vault:
     system-name: jme
   web:

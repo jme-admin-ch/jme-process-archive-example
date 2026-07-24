@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: "jdbc:postgresql://postgres:5432/jme_process_archive"
+  cloud:
+    vault:
+      host: jme-process-archive-service-vault-server
+      port: 8200
+
+jeap:
+  vault:
+    url: http://jme-process-archive-service-vault-server:8200
+  messaging:
+    kafka:
+      bootstrapServers: "broker:29092"
+      schemaRegistryUrl: "http://schema-registry:8081"
+      securityProtocol: PLAINTEXT
+  processarchive:
+    objectstorage:
+      connection:
+        access-url: http://rustfs:9000

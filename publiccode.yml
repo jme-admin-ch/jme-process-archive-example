@@ -1,0 +1,47 @@
+publiccodeYmlVersion: 0.5.0
+name: jme-process-archive-example
+applicationSuite: JME
+softwareVersion: 0.0.1
+releaseDate: 2026-07-21
+url: "https://github.com/jme-admin-ch/jme-process-archive-example.git"
+landingURL: "https://github.com/jme-admin-ch/jme"
+platforms:
+  - web
+categories:
+  - application-development
+developmentStatus: stable
+softwareType: standalone/backend
+organisation:
+  uri: https://ld.admin.ch/office/V.1.7
+  name: Federal Office of Information Technology, Systems and Telecommunication
+description:
+  en:
+    localisedName: jme-process-archive-example
+    shortDescription: Example project demonstrating the jEAP Process Archive Service (PAS).
+    longDescription: >
+      This example shows how a microservice can archive artifacts into an S3-compatible object store using the
+      jEAP Process Archive Service (PAS). A resource service publishes domain events/commands over Kafka, a PAS
+      instance consumes them and archives the artifacts with object-lock, encryption via Vault, and optional
+      OpenSearch indexing. The repository contains the following modules:
+      * jme-process-archive-events: thin builder classes around the Avro message types used by this example
+      * jme-process-archive-resource-service: owns the example domain (Decree, DecreeDocument, Diagram,
+        Declaration) and publishes the corresponding events/commands to Kafka
+      * jme-process-archive-service: the PAS instance, contributing plugin implementations and configuration
+      * jme-process-archive-inspection-service: REST access to archived objects in the object store
+      * jme-process-archive-auth-scs: authenticates users/clients for the protected PAS APIs
+    features:
+      - Demonstrates Event Carried State Transfer and Event Notification archiving styles
+      - Demonstrates encryption via Vault and object-lock retention in an S3-compatible object store
+      - Demonstrates optional OpenSearch indexing of archived artifacts
+      - Demonstrates the backfill mechanism for archiving artifacts retroactively
+legal:
+  license: Apache-2.0
+maintenance:
+  type: internal
+  contacts:
+    - name: Federal Office of Information Technology, Systems and Telecommunication FOITT
+      email: jeap-community@bit.admin.ch
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - en

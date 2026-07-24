@@ -12,31 +12,32 @@
 
     <artifactId>jme-process-archive-service</artifactId>
     <name>${project.artifactId}</name>
+    <description>Example Process Archive Service (PAS) instance that archives artifacts referenced by
+        consumed domain events into an encrypted, S3-compatible object store.</description>
     <packaging>jar</packaging>
 
     <properties>
-        <ecr-repo-name>${project.artifactId}</ecr-repo-name>
         <main-class>ch.admin.bit.jeap.processarchive.service.ProcessArchiveApplication</main-class>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>ch.admin.bit.jme.messagetype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.messagetype.jme</groupId>
             <artifactId>jme-decree-document-created-event</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jme.messagetype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.messagetype.jme</groupId>
             <artifactId>jme-decree-created-event</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jme.messagetype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.messagetype.jme</groupId>
             <artifactId>jme-diagram-version-created-event</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jme.messagetype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.messagetype.jme</groupId>
             <artifactId>jme-create-declaration-command</artifactId>
             <version>1.0.0</version>
         </dependency>
@@ -81,27 +82,11 @@
         </dependency>
         <dependency>
             <groupId>ch.admin.bit.jeap</groupId>
-            <artifactId>jeap-crypto-aws-kms-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.admin.bit.jeap</groupId>
             <artifactId>jeap-spring-boot-vault-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>ch.admin.bit.jeap</groupId>
-            <artifactId>jeap-spring-boot-config-aws-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.admin.bit.jeap</groupId>
             <artifactId>jeap-spring-boot-db-migration-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.admin.bit.jeap</groupId>
-            <artifactId>jeap-spring-boot-postgresql-aws-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.admin.bit.jeap</groupId>
-            <artifactId>jeap-spring-boot-tls-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -156,12 +141,12 @@
             <version>1</version>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jme.indextype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.indextype.jme</groupId>
             <artifactId>jme-decree-document-v1</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jme.indextype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.indextype.jme</groupId>
             <artifactId>jme-decree-v1</artifactId>
             <version>1.0</version>
         </dependency>
@@ -170,42 +155,27 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>ch.admin.bit.jeap.processarchive.service.ProcessArchiveApplication</mainClass>
+                    <mainClass>${main-class}</mainClass>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>ch.admin.bit.jeap</groupId>
-                <artifactId>truststore-maven-plugin</artifactId>
                 <executions>
                     <execution>
+                        <!-- Skip repackaging to avoid building a fat jar; RHOS/Nivel wrapper modules do that -->
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>spring-boot</id>
                         <goals>
-                            <goal>build-truststores</goal>
+                            <goal>build-info</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <certificateRepositoryUrl>https://bitbucket.bit.admin.ch/scm/bit_jme/jme-certificates.git
-                    </certificateRepositoryUrl>
-                    <!-- the process archive example is only deployed to the 'dev' environments -->
-                    <environments>
-                        <environment>dev</environment>
-                    </environments>
-                    <includes>
-                        <include>technology/kafka</include>
-                    </includes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <configuration>
-                    <container>
-                        <mainClass>${main-class}</mainClass>
-                    </container>
-                </configuration>
             </plugin>
         </plugins>
     </build>

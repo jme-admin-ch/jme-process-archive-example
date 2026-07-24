@@ -1,0 +1,9 @@
+jeap:
+  vault:
+    url: http://jme-process-archive-service-vault-server:8200
+
+jme:
+  processarchive:
+    objectstorage:
+      connection:
+        access-url: http://rustfs:9000

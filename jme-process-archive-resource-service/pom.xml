@@ -12,10 +12,12 @@
 
     <artifactId>jme-process-archive-resource-service</artifactId>
     <name>${project.artifactId}</name>
+    <description>Example resource service that issues decrees and documents, triggering automatic archiving
+        via domain events.</description>
     <packaging>jar</packaging>
 
     <properties>
-        <ecr-repo-name>${project.artifactId}</ecr-repo-name>
+        <main-class>ch.admin.bit.jeap.jme.processarchive.resource.Application</main-class>
         <shared-archived-artifact-version-created-event.version>2.0.2</shared-archived-artifact-version-created-event.version>
     </properties>
 
@@ -48,14 +50,6 @@
             <artifactId>jeap-messaging-infrastructure-kafka</artifactId>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jeap</groupId>
-            <artifactId>jeap-spring-boot-config-aws-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.admin.bit.jeap</groupId>
-            <artifactId>jeap-spring-boot-tls-starter</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -86,35 +80,28 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>ch.admin.bit.jeap</groupId>
-                <artifactId>truststore-maven-plugin</artifactId>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>${main-class}</mainClass>
+                </configuration>
                 <executions>
                     <execution>
+                        <!-- Skip repackaging to avoid building a fat jar; RHOS/Nivel wrapper modules do that -->
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>spring-boot</id>
                         <goals>
-                            <goal>build-truststores</goal>
+                            <goal>build-info</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <certificateRepositoryUrl>https://bitbucket.bit.admin.ch/scm/bit_jme/jme-certificates.git</certificateRepositoryUrl>
-                    <!-- the process archive example is only deployed to the 'dev' environments -->
-                    <environments>
-                        <environment>dev</environment>
-                    </environments>
-                    <includes>
-                        <include>technology/kafka</include>
-                    </includes>
-                </configuration>
             </plugin>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-            </plugin>
-
         </plugins>
     </build>
 </project>

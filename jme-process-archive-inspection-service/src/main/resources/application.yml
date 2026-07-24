@@ -10,9 +10,6 @@ server:
     context-path: /${spring.application.name}
 
 jeap:
-  crypto:
-    awskms:
-      enabled: false
   vault:
     system-name: jme
   web:

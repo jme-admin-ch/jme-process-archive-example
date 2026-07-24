@@ -12,6 +12,7 @@
 
     <artifactId>jme-process-archive-events</artifactId>
     <name>${project.artifactId}</name>
+    <description>Shared Avro event and archive-type definitions used by the process archive example modules.</description>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -20,22 +21,22 @@
             <artifactId>jeap-messaging-avro</artifactId>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jme.messagetype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.messagetype.jme</groupId>
             <artifactId>jme-decree-document-created-event</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jme.messagetype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.messagetype.jme</groupId>
             <artifactId>jme-decree-created-event</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jme.messagetype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.messagetype.jme</groupId>
             <artifactId>jme-diagram-version-created-event</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
-            <groupId>ch.admin.bit.jme.messagetype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.messagetype.jme</groupId>
             <artifactId>jme-create-declaration-command</artifactId>
             <version>1.0.0</version>
         </dependency>

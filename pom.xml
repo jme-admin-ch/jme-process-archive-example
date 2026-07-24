@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Example showing how a microservice can automatically archive artifacts to an object store,
+        based on domain events, using an instance of the jEAP Process Archive Service.</description>
     <modelVersion>4.0.0</modelVersion>
+    <url>https://github.com/jme-admin-ch/jme-process-archive-example/tree/main</url>
+    <scm>
+        <url>https://github.com/jme-admin-ch/jme-process-archive-example.git</url>
+        <connection>scm:git:git://github.com/jme-admin-ch/jme-process-archive-example.git</connection>
+        <developerConnection>scm:git:ssh://github.com:jme-admin-ch/jme-process-archive-example.git</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <name>BIT</name>
+            <email>jeap-community@bit.admin.ch</email>
+            <organization>Federal Office of Information Technology, Systems and Telecommunication FOITT</organization>
+            <organizationUrl>https://www.bit.admin.ch/</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
 
     <parent>
         <groupId>ch.admin.bit.jeap</groupId>
@@ -17,43 +41,97 @@
         <jeap-process-archive-service.version>18.3.0</jeap-process-archive-service.version>
         <jeap-process-archive-reader.version>5.2.0</jeap-process-archive-reader.version>
         <jeap-oauth-mock-server.version>7.2.0</jeap-oauth-mock-server.version>
+        <jme-spring-boot-integration-test.version>5.5.0</jme-spring-boot-integration-test.version>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
 
     <modules>
-        <module>jme-process-archive-service</module>
         <module>jme-process-archive-events</module>
         <module>jme-process-archive-resource-service</module>
+        <module>jme-process-archive-service</module>
         <module>jme-process-archive-inspection-service</module>
         <module>jme-process-archive-auth-scs</module>
+        <module>jme-process-archive-test</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>jme-process-archive-events</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>jme-process-archive-resource-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>jme-process-archive-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>jme-process-archive-inspection-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>
             <plugins>
+                <!-- Add license to jar manifest -->
                 <plugin>
-                    <groupId>com.google.cloud.tools</groupId>
-                    <artifactId>jib-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <phase>deploy</phase>
-                            <goals>
-                                <goal>build</goal>
-                            </goals>
-                        </execution>
-                    </executions>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
                     <configuration>
-                        <from>
-                            <image>amazoncorretto:25-al2023-headless</image>
-                        </from>
-                        <to>
-                            <image>654654230768.dkr.ecr.eu-central-2.amazonaws.com/${ecr-repo-name}:${project.version}
-                            </image>
-                            <credHelper>ecr-login</credHelper>
-                        </to>
+                        <archive>
+                            <manifestEntries>
+                                <Bundle-License>https://www.apache.org/licenses/LICENSE-2.0</Bundle-License>
+                            </manifestEntries>
+                        </archive>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <!-- Check third-party license compliance -->
+            <plugin>
+                <groupId>org.honton.chas</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+            </plugin>
+            <!-- Generate third-party license list and check for missing license information -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+            </plugin>
+            <!-- Attach an empty javadoc jar to every module (javadoc generation itself is skipped via
+                 maven.javadoc.skip) so Maven Central's "javadoc must be present" check is satisfied
+                 uniformly, including for modules with no Java sources of their own. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>empty-javadoc-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>javadoc</classifier>
+                            <classesDirectory>${project.basedir}</classesDirectory>
+                            <excludes>
+                                <exclude>**/**</exclude>
+                            </excludes>
+                            <forceCreation>true</forceCreation>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

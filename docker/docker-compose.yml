@@ -14,16 +14,15 @@ x-rustfs-common: &rustfs-common
     HTTPS_PROXY: ''
   healthcheck:
     test: [ "CMD-SHELL", "curl -fsS http://127.0.0.1:9000/health && curl -fsS http://127.0.0.1:9001/rustfs/console/health" ]
-    interval: 30s
+    interval: 5s
     timeout: 10s
-    retries: 3
-    start_period: 40s
+    retries: 30
+    start_period: 60s
 
 services:
   postgres:
     image: postgres:18-alpine
     hostname: postgres
-    container_name: jme-process-archive-postgres
     ports:
       - "5432:5432"
     environment:
@@ -61,23 +60,54 @@ services:
     depends_on:
       rustfs:
         condition: service_healthy
-    entrypoint: >
-      /bin/sh -c "
-      until aws --endpoint-url http://rustfs:9000 s3api list-buckets; do
-        echo 'Waiting for RustFS...';
-        sleep 2;
-      done;
-      aws --endpoint-url http://rustfs:9000 s3api create-bucket --bucket bit-jme-processarchive-lockable-obs-local --object-lock-enabled-for-bucket \
-        || aws --endpoint-url http://rustfs:9000 s3api head-bucket --bucket bit-jme-processarchive-lockable-obs-local;
-      "
+    # Stays running after bucket creation finishes (see the comment on jme-process-archive-service-vault-client),
+    # and only reports healthy once the bucket actually exists - the retry loop waiting for RustFS means the
+    # container can be "running" well before that, and `docker compose up --wait` only tracks container state,
+    # not what the entrypoint script has actually accomplished yet.
+    # On CI (behind a corporate HTTP(S) proxy) calls to http://rustfs:9000 - a hostname only resolvable
+    # inside this compose network - were being routed through the proxy and failing with HTTP 504, exactly
+    # like jme-process-archive-service-vault-client had to work around for its own Vault calls (see below).
+    # AWS_MAX_ATTEMPTS/AWS_RETRY_MODE add extra resilience on top in case RustFS itself is just slow to
+    # start serving requests under CI's resource constraints; the outer loop retries the actual operation
+    # directly rather than a separate probe call.
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        i=0
+        until aws --endpoint-url http://rustfs:9000 s3api create-bucket --bucket bit-jme-processarchive-lockable-obs-local --object-lock-enabled-for-bucket \
+            || aws --endpoint-url http://rustfs:9000 s3api head-bucket --bucket bit-jme-processarchive-lockable-obs-local; do
+          i=$$((i + 1))
+          if [ "$$i" -ge 60 ]; then
+            echo 'Giving up waiting for RustFS after 60 attempts'
+            exit 1
+          fi
+          echo 'Waiting for RustFS...'
+          sleep 5
+        done
+        touch /tmp/bucket-ready
+        tail -f /dev/null
     environment:
       AWS_ACCESS_KEY_ID: rustfsadmin
       AWS_SECRET_ACCESS_KEY: rustfsadmin
       AWS_DEFAULT_REGION: us-east-1
+      AWS_MAX_ATTEMPTS: "10"
+      AWS_RETRY_MODE: adaptive
+      http_proxy: ''
+      https_proxy: ''
+      HTTP_PROXY: ''
+      HTTPS_PROXY: ''
+      no_proxy: 'rustfs'
+      NO_PROXY: 'rustfs'
+    healthcheck:
+      test: [ "CMD-SHELL", "test -f /tmp/bucket-ready" ]
+      interval: 3s
+      timeout: 3s
+      retries: 60
+      start_period: 90s
 
   jme-process-archive-service-vault-server:
     image: hashicorp/vault:1.21.4
-    container_name: jme-process-archive-service-vault-server
     ports:
       - "8200:8200"
     environment:
@@ -90,14 +120,23 @@ services:
     image: hashicorp/vault:1.21.4
     links:
       - jme-process-archive-service-vault-server
-    container_name: jme-process-archive-service-vault-client
     depends_on:
       - jme-process-archive-service-vault-server
     volumes:
       - ./vault-test-config.sh:/vault-test-config.sh
       - ./jme-process-archive-service-vault-pol.hcl:/jme-process-archive-service-vault-pol.hcl
       - ./jme-process-archive-inspection-service-vault-pol.hcl:/jme-process-archive-inspection-service-vault-pol.hcl
-    command: '/bin/sh /vault-test-config.sh'
+    # Stays running after the setup script finishes, and only reports healthy once the script (several
+    # sequential Vault writes: transit engine, keys, policies, approles) has actually completed - `docker
+    # compose up --wait` only tracks container state, not what the script has actually accomplished yet,
+    # so a plain "still running" signal would let dependent services start racing against an unfinished setup.
+    command: '/bin/sh -c "/bin/sh /vault-test-config.sh && touch /tmp/vault-config-ready && tail -f /dev/null"'
+    healthcheck:
+      test: [ "CMD-SHELL", "test -f /tmp/vault-config-ready" ]
+      interval: 3s
+      timeout: 3s
+      retries: 60
+      start_period: 90s
 
   ############################################
   # Kafka Cluster
@@ -106,7 +145,6 @@ services:
   broker:
     image: confluentinc/cp-kafka:8.2.0
     hostname: broker
-    container_name: broker
     ports:
       - "12000:12000"
     volumes:
@@ -133,17 +171,26 @@ services:
 
   broker-init:
     image: confluentinc/cp-kafka:8.2.0
-    command: "kafka-configs --bootstrap-server broker:29092 --alter --add-config 'SCRAM-SHA-512=[password=broker-secret]' --entity-type users --entity-name broker-user"
+    # Stays running after the config command finishes, and only reports healthy once it has actually
+    # completed - see the comment on jme-process-archive-service-vault-client.
+    command: "bash -c \"kafka-configs --bootstrap-server broker:29092 --alter --add-config 'SCRAM-SHA-512=[password=broker-secret]' --entity-type users --entity-name broker-user && touch /tmp/broker-init-ready && tail -f /dev/null\""
     depends_on:
       - broker
+    healthcheck:
+      test: [ "CMD-SHELL", "test -f /tmp/broker-init-ready" ]
+      interval: 3s
+      timeout: 3s
+      retries: 60
+      start_period: 90s
 
   schema-registry:
     image: confluentinc/cp-schema-registry:8.2.0
     hostname: schema-registry
-    container_name: schema-registry
     depends_on:
-      - broker
-      - broker-init
+      broker:
+        condition: service_started
+      broker-init:
+        condition: service_healthy
     ports:
       - "13000:8081"
     environment:
