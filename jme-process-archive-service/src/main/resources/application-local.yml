@@ -1,0 +1,70 @@
+server:
+  port: 8080
+jeap:
+  monitor:
+    prometheus:
+      password: "{noop}secret"
+  messaging:
+    kafka:
+      bootstrapServers: "http://localhost:12000"
+      schemaRegistryUrl: "http://localhost:13000"
+      username: broker-user
+      password: broker-secret
+      securityProtocol: SASL_PLAINTEXT
+  swagger:
+    status: open
+  security:
+    oauth2:
+      resourceserver:
+        authorization-server:
+          issuer: "http://localhost:8081/jme-process-archive-auth-scs"
+          jwk-set-uri: "${jeap.security.oauth2.resourceserver.authorization-server.issuer}/.well-known/jwks.json"
+  processarchive:
+    objectstorage:
+      connection:
+        access-url: http://localhost:9101
+        access-key: rustfsadmin
+        secret-key: rustfsadmin
+      storage:
+        bucket: bit-jme-processarchive-lockable-obs-local
+        prefix-mode: DAY
+  vault:
+    url: http://localhost:8200
+    app-role:
+      role-id: dummy
+      secret-id: dummy
+  crypto:
+    vault:
+      keys:
+        jme-process-archive-example-key:
+          secret-engine-path: "transit/jme"
+          key-name: "jme-process-archive-example-s3-key"
+
+decree-document.archive.uri: "http://localhost:8082/jme-process-archive-resource-service/api/archive/decreedocuments/{id}"
+diagram.archive.uri: "http://localhost:8082/jme-process-archive-resource-service/api/diagrams/{id}/archival?version={version}"
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jme_process_archive
+    username: jme_process_archive
+    password: jme_process_archive
+    hikari:
+      schema: data
+  jpa:
+    properties:
+      hibernate.default_schema: data
+  cloud:
+    vault:
+      authentication: TOKEN
+      token: secret
+
+togglz:
+  features:
+    FEATURE_DOCUMENT_CREATED:
+      enabled: true
+    FEATURE_DECREE_CREATED:
+      enabled: true
+    FEATURE_DECREE_SUMMARY:
+      enabled: true
+    FEATURE_DIAGRAM_VERSION_CREATED:
+      enabled: true

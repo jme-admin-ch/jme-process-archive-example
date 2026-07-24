@@ -1,0 +1,159 @@
+x-rustfs-common: &rustfs-common
+  image: rustfs/rustfs:1.0.0-beta.8
+  environment:
+    RUSTFS_VOLUMES: /data
+    RUSTFS_ADDRESS: 0.0.0.0:9000
+    RUSTFS_CONSOLE_ADDRESS: 0.0.0.0:9001
+    RUSTFS_ACCESS_KEY: rustfsadmin
+    RUSTFS_SECRET_KEY: rustfsadmin
+    RUSTFS_CONSOLE_ENABLE: "true"
+    RUSTFS_REGION: us-east-1
+    http_proxy: ''
+    https_proxy: ''
+    HTTP_PROXY: ''
+    HTTPS_PROXY: ''
+  healthcheck:
+    test: [ "CMD-SHELL", "curl -fsS http://127.0.0.1:9000/health && curl -fsS http://127.0.0.1:9001/rustfs/console/health" ]
+    interval: 30s
+    timeout: 10s
+    retries: 3
+    start_period: 40s
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    hostname: postgres
+    container_name: jme-process-archive-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: jme_process_archive
+      POSTGRES_USER: jme_process_archive
+      POSTGRES_PASSWORD: jme_process_archive
+    volumes:
+      - postgres-18-data:/var/lib/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U jme_process_archive -d jme_process_archive" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rustfs:
+    <<: *rustfs-common
+    hostname: rustfs
+    depends_on:
+      rustfs-volume-permission-helper:
+        condition: service_completed_successfully
+    ports:
+      - "9101:9000"
+      - "9001:9001"
+    volumes:
+      - rustfs-data:/data
+
+  rustfs-volume-permission-helper:
+    image: alpine:3.22.2
+    volumes:
+      - rustfs-data:/data
+    command: sh -c "chown -R 10001:10001 /data"
+
+  createbucket:
+    image: amazon/aws-cli:2.32.16
+    depends_on:
+      rustfs:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      until aws --endpoint-url http://rustfs:9000 s3api list-buckets; do
+        echo 'Waiting for RustFS...';
+        sleep 2;
+      done;
+      aws --endpoint-url http://rustfs:9000 s3api create-bucket --bucket bit-jme-processarchive-lockable-obs-local --object-lock-enabled-for-bucket \
+        || aws --endpoint-url http://rustfs:9000 s3api head-bucket --bucket bit-jme-processarchive-lockable-obs-local;
+      "
+    environment:
+      AWS_ACCESS_KEY_ID: rustfsadmin
+      AWS_SECRET_ACCESS_KEY: rustfsadmin
+      AWS_DEFAULT_REGION: us-east-1
+
+  jme-process-archive-service-vault-server:
+    image: hashicorp/vault:1.21.4
+    container_name: jme-process-archive-service-vault-server
+    ports:
+      - "8200:8200"
+    environment:
+      - VAULT_DEV_ROOT_TOKEN_ID=secret
+      - VAULT_DEV_LISTEN_ADDRESS=0.0.0.0:8200
+      - >
+        VAULT_LOCAL_CONFIG={"disable_mlock": true}
+
+  jme-process-archive-service-vault-client:
+    image: hashicorp/vault:1.21.4
+    links:
+      - jme-process-archive-service-vault-server
+    container_name: jme-process-archive-service-vault-client
+    depends_on:
+      - jme-process-archive-service-vault-server
+    volumes:
+      - ./vault-test-config.sh:/vault-test-config.sh
+      - ./jme-process-archive-service-vault-pol.hcl:/jme-process-archive-service-vault-pol.hcl
+      - ./jme-process-archive-inspection-service-vault-pol.hcl:/jme-process-archive-inspection-service-vault-pol.hcl
+    command: '/bin/sh /vault-test-config.sh'
+
+  ############################################
+  # Kafka Cluster
+  ############################################
+
+  broker:
+    image: confluentinc/cp-kafka:8.2.0
+    hostname: broker
+    container_name: broker
+    ports:
+      - "12000:12000"
+    volumes:
+      - ./kafka_server_jaas.conf:/etc/kafka/kafka_server_jaas.conf
+    environment:
+      # KRaft mode settings
+      KAFKA_BROKER_ID: 1
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@broker:29093'
+      # KRaft cluster ID - format properly, a 22-character base64-encoded string, for the confluent platform
+      CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:SASL_PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:12000
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:12000,CONTROLLER://0.0.0.0:29093
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      # Authentication
+      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/kafka_server_jaas.conf"
+      KAFKA_SASL_ENABLED_MECHANISMS: SCRAM-SHA-512
+      # Temporary storage settings
+      KAFKA_LOG_DIRS: /tmp/kafka-logs
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  broker-init:
+    image: confluentinc/cp-kafka:8.2.0
+    command: "kafka-configs --bootstrap-server broker:29092 --alter --add-config 'SCRAM-SHA-512=[password=broker-secret]' --entity-type users --entity-name broker-user"
+    depends_on:
+      - broker
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:8.2.0
+    hostname: schema-registry
+    container_name: schema-registry
+    depends_on:
+      - broker
+      - broker-init
+    ports:
+      - "13000:8081"
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://broker:29092
+
+
+
+## By default, this config uses default local driver,
+## For custom volumes replace with volume driver configuration.
+volumes:
+  postgres-18-data:
+  rustfs-data:

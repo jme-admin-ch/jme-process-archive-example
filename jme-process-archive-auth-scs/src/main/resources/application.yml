@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: "jme-process-archive-auth-scs"
+server:
+  servlet:
+    context-path: /${spring.application.name}
+
+oauth-mock-data:
+  clients:
+    - client-id: "jme-process-archive-it-client"
+      client-secret: "{noop}secret"
+      context: "SYS"
+      userroles: ["jme_@searchitem_#read", "jme_@backfilljob_#write", "jme_@backfilljob_#read"]

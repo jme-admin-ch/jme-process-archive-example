@@ -1,0 +1,14 @@
+{
+  "indexTypes": [
+    {
+      "indexType": "JmeDecree",
+      "archiveType": "ch.admin.bit.jeap.processarchive.test.decree.v3.Decree",
+      "archiveTypeToSearchItemConverter": "ch.admin.bit.jeap.jme.processarchive.service.indextype.DecreeConverter"
+    },
+    {
+      "indexType": "JmeDecreeDocument",
+      "archiveType": "ch.admin.bit.jeap.processarchive.test.decreedocument.v1.DecreeDocument",
+      "archiveTypeToSearchItemConverter": "ch.admin.bit.jeap.jme.processarchive.service.indextype.DecreeDocumentConverter"
+    }
+  ]
+}

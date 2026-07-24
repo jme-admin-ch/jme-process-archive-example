@@ -1,0 +1,22 @@
+management:
+  server:
+    port: 8082
+    base-path: /${spring.application.name}
+# Make sure consumers on AWS and bit have a unique consumer group ID each, otherwise they would be competing for partitions
+jme.multicluster:
+  consumer-group-id: "${spring.application.name}-rhos"
+jeap:
+  messaging:
+    kafka:
+      systemName: jme
+      # The RHOS cluster configuration is made via the gitops repository
+  monitor:
+    prometheus:
+      secure: false
+  logging:
+    platform: rhos
+  swagger:
+    status: OPEN
+  web:
+    tls:
+      enabled: false

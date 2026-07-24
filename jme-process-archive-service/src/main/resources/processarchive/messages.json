@@ -1,0 +1,43 @@
+{
+  "messages": [
+    {
+      "id": "decree-document",
+      "messageName": "JmeDecreeDocumentCreatedEvent",
+      "topicName": "jme-process-archive-decreedocumentcreated",
+      "archiveDataReferenceProvider": "ch.admin.bit.jeap.jme.processarchive.service.provider.DecreeDocumentCreatedArchiveDataReferenceProvider",
+      "uri": "${decree-document.archive.uri}",
+      "featureFlag": "FEATURE_DOCUMENT_CREATED"
+    },
+    {
+      "id": "decree",
+      "messageName": "JmeDecreeCreatedEvent",
+      "topicName": "jme-process-archive-decreecreated",
+      "messageArchiveDataProvider": "ch.admin.bit.jeap.jme.processarchive.service.provider.DecreeCreatedDataProvider",
+      "correlationProvider": "ch.admin.bit.jeap.jme.processarchive.service.provider.DecreeCorrelationProvider",
+      "featureFlag": "FEATURE_DECREE_CREATED"
+    },
+    {
+      "id": "decree-summary",
+      "messageName": "JmeDecreeCreatedEvent",
+      "topicName": "jme-process-archive-decreecreated",
+      "messageArchiveDataProvider": "ch.admin.bit.jeap.jme.processarchive.service.provider.DecreeSummaryDataProvider",
+      "correlationProvider": "ch.admin.bit.jeap.jme.processarchive.service.provider.DecreeCorrelationProvider",
+      "featureFlag": "FEATURE_DECREE_SUMMARY"
+    },
+    {
+      "messageName": "JmeDiagramVersionCreatedEvent",
+      "topicName": "jme-process-archive-diagramversioncreated",
+      "archiveDataReferenceProvider": "ch.admin.bit.jeap.jme.processarchive.service.provider.DiagramVersionCreatedArchiveDataReferenceProvider",
+      "condition": "ch.admin.bit.jeap.jme.processarchive.service.condition.ArchiveDiagramCondition",
+      "uri": "${diagram.archive.uri}",
+      "featureFlag": "FEATURE_DIAGRAM_VERSION_CREATED"
+    },
+    {
+      "messageName": "JmeCreateDeclarationCommand",
+      "topicName": "jme-messaging-create-declaration",
+      "messageArchiveDataProvider": "ch.admin.bit.jeap.jme.processarchive.service.provider.CreateDeclarationCommandDataProvider",
+      "correlationProvider": "ch.admin.bit.jeap.jme.processarchive.service.provider.CreateDeclarationCommandReferenceProvider",
+      "condition": "ch.admin.bit.jeap.jme.processarchive.service.condition.CreateDeclarationCommandArchiveCondition"
+    }
+  ]
+}

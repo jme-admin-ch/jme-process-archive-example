@@ -1,0 +1,26 @@
+jeap:
+  messaging:
+    kafka:
+      cluster:
+        bit:
+          defaultCluster: true
+          bootstrap-servers: ${vcap.services.kafka.credentials.url}
+          security-protocol: SASL_SSL
+          username: ${vcap.services.kafka.credentials.username}
+          password: ${vcap.services.kafka.credentials.password}
+          use-schema-registry: true
+          schema-registry-url: ${vcap.services.kafka.credentials.schemaRegistryUrl}
+          schema-registry-username: ${vcap.services.kafka.credentials.schemaRegistryUsername}
+          schema-registry-password: ${vcap.services.kafka.credentials.schemaRegistryPassword}
+          auto-register-schema: true
+
+        other:
+          bootstrap-servers: ${vcap.services.kafka.credentials.url}
+          security-protocol: SASL_SSL
+          username: ${vcap.services.kafka.credentials.username}
+          password: ${vcap.services.kafka.credentials.password}
+          use-schema-registry: true
+          schema-registry-url: ${vcap.services.kafka.credentials.schemaRegistryUrl}
+          schema-registry-username: ${vcap.services.kafka.credentials.schemaRegistryUsername}
+          schema-registry-password: ${vcap.services.kafka.credentials.schemaRegistryPassword}
+          auto-register-schema: true

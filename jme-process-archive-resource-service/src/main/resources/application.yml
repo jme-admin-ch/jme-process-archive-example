@@ -1,0 +1,23 @@
+jeap:
+  messaging:
+    kafka:
+      error-topic-name: jme-messageprocessing-failed
+      system-name: JME
+      service-name: ${spring.application.name}
+  web:
+    tls:
+      enabled: false
+jme:
+  processarchive:
+    topic:
+      decree-created: "jme-process-archive-decreecreated"
+      decree-document-created: "jme-process-archive-decreedocumentcreated"
+      diagram-version-created: "jme-process-archive-diagramversioncreated"
+
+spring:
+  application:
+    name: jme-process-archive-resource-service
+
+server:
+  servlet:
+    context-path: /${spring.application.name}

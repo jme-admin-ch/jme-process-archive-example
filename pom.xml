@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ch.admin.bit.jeap</groupId>
+        <artifactId>jeap-spring-boot-parent</artifactId>
+        <version>37.6.0</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <artifactId>jme-process-archive-example</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <properties>
+        <jeap-process-archive-service.version>18.3.0</jeap-process-archive-service.version>
+        <jeap-process-archive-reader.version>5.2.0</jeap-process-archive-reader.version>
+        <jeap-oauth-mock-server.version>7.2.0</jeap-oauth-mock-server.version>
+    </properties>
+
+    <modules>
+        <module>jme-process-archive-service</module>
+        <module>jme-process-archive-events</module>
+        <module>jme-process-archive-resource-service</module>
+        <module>jme-process-archive-inspection-service</module>
+        <module>jme-process-archive-auth-scs</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <from>
+                            <image>amazoncorretto:25-al2023-headless</image>
+                        </from>
+                        <to>
+                            <image>654654230768.dkr.ecr.eu-central-2.amazonaws.com/${ecr-repo-name}:${project.version}
+                            </image>
+                            <credHelper>ecr-login</credHelper>
+                        </to>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

@@ -1,0 +1,28 @@
+server:
+  port: 8083
+
+jeap:
+  swagger:
+    status: open
+  vault:
+    url: http://localhost:8200
+    app-role:
+      role-id: dummy
+      secret-id: dummy
+
+jme:
+  processarchive:
+    objectstorage:
+      connection:
+        access-url: http://localhost:9101
+        access-key: rustfsadmin
+        secret-key: rustfsadmin
+
+logging.level:
+  ch.admin.bit.jeap: DEBUG
+
+spring:
+  cloud:
+    vault:
+      authentication: TOKEN
+      token: secret

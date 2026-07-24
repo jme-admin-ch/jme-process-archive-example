@@ -1,0 +1,55 @@
+spring:
+  cloud:
+    vault:
+      enabled: false
+  config:
+    import:
+      - "jeap-app-config-aws:"
+
+management:
+  server:
+    base-path: ${server.servlet.context-path}
+    port: 52873
+    ssl:
+      enabled: false
+jme:
+  processarchive:
+    objectstorage:
+      connection:
+        region: eu-central-2
+###
+# Note: In a real environment, it is recommended to get the Kafka configuration properties from AWS AppConfig.
+# The properties are shown here only to provide a complete example.
+# All Kafka properties below are system-wide configuration entries. The service-specific authorization happens
+# via the IAM role assigned to the ECS task, and does not need any specific configuration entries.
+###
+
+jeap:
+  crypto:
+    awskms:
+      enabled: true
+  logging.platform: cloudwatch
+  swagger:
+    status: open
+  monitor:
+    prometheus:
+      secure: false
+  messaging:
+    kafka:
+      systemName: jme
+      cluster:
+        awsMskBazg:
+          defaultCluster: true
+          bootstrapServers: "${aws.services.kafka.bootstrapServers}"
+          aws:
+            glue:
+              registryName: ${aws.services.glue.registryName}
+              region: "${aws.services.glue.region}"
+              assume-iam-role-arn: "${aws.services.glue.roleArn}"
+            msk:
+              iamAuthEnabled: true
+              region: "${AWS_REGION}"
+              assume-iam-role-arn: "${aws.services.kafka.roleArn}"
+  web:
+    tls:
+      enabled: true

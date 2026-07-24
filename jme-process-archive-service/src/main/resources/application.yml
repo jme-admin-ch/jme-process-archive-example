@@ -1,0 +1,63 @@
+jeap:
+  processarchive.backfill.topic: jme-process-archive-createartifact
+  messaging:
+    kafka:
+      error-topic-name: jme-messageprocessing-failed
+      system-name: JME
+      service-name: ${spring.application.name}
+  crypto:
+    awskms:
+      enabled: false
+  vault:
+    system-name: jme
+  web:
+    tls:
+      enabled: false
+  swagger:
+    status: open
+  security:
+    oauth2:
+      resourceserver:
+        system-name: "jme"
+  processarchive:
+    archivedartifact:
+      event-topic: jme-process-archive-artifactversioncreated
+      system-id: ch.admin.bit.jeap.System
+    registry:
+      types:
+        - archive-type: JsonExample  # An example of an archive type not registered using an ArchiveTypeProvider, but directly via configuration.
+          system: JME
+          expiration-days: 2
+          reference-id-type: ch.admin.bit.jeap.jme.JsonExampleReferenceId
+          version: 1
+    backfill:
+      enabled: true
+
+# The PAS does mostly I/O when archiving data (remote REST calls, S3), and will thus typically be able to process
+# incoming archive events faster when consuming them concurrently.
+# Note: This assumes the number of partitions on the topic allows concurrent processing (i.e. the number of partitions
+# is at least as big as <number of instances> * <listener concurrency value>)
+spring:
+  kafka:
+    listener:
+      concurrency: 3
+  application:
+    name: jme-process-archive-service
+  jpa:
+    properties:
+      hibernate.default_schema: data
+  datasource:
+    hikari:
+      schema: ${spring.jpa.properties.hibernate.default_schema}
+  flyway:
+    default-schema: ${spring.jpa.properties.hibernate.default_schema}
+  cloud:
+    vault:
+      enabled: true
+
+logging.level:
+  ch.admin.bit.jeap.processarchive: DEBUG
+
+server:
+  servlet:
+    context-path: /process-archive

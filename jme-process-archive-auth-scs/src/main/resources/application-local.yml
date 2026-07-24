@@ -1,0 +1,9 @@
+server:
+  port: 8081
+mockserver:
+  base-url: "http://localhost:${server.port}/${spring.application.name}"
+
+jeap:
+  web:
+    tls:
+      enabled: false

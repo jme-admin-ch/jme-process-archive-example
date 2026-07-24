@@ -1,0 +1,97 @@
+spring:
+  cloud:
+    vault:
+      enabled: false
+  config:
+    import:
+      - "jeap-app-config-aws:"
+
+management:
+  server:
+    base-path: jme-process-archive-service
+    port: 52873
+    ssl:
+      enabled: false
+
+jeap:
+  postgresql:
+    aws:
+      enabled: true
+  datasource:
+    aws:
+      database-name: jme_process_archive_db
+  processarchive:
+    objectstorage:
+      connection:
+        region: "eu-central-2"
+      storage:
+        bucket: jme-processarchive-lockable-obs-nivel-dev
+        prefix-mode: DAY
+  logging:
+    platform: cloudwatch
+  monitor:
+    prometheus:
+      secure: false
+  swagger:
+    status: open
+  security:
+    oauth2:
+      resourceserver:
+        authorization-server:
+          issuer: "https://jme-dev.ingress.nivel.bazg.admin.ch/jme-process-archive-auth-scs"
+          jwk-set-uri: "https://internal-csp.jme-dev.nivel.bazg.admin.ch/jme-process-archive-auth-scs/.well-known/jwks.json"
+  web:
+    tls:
+      enabled: true
+  crypto:
+    awskms:
+      enabled: true
+      default-escrow-key:
+        key-type: RSA_4096
+        # This is the public part of an RSA-4096 key named "jme-crypto-escrow-key" created in the JME vault
+        public-key: |
+          -----BEGIN PUBLIC KEY-----
+          MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAzai8s/gSFMZE8SCdecjy
+          Op2TeQCuVwSuw3Zm7DmG7dcvMO6Z2Pao5Q1B6gXRG4HdxUDJPJbzEpAWuv+aa1Gx
+          i5AnJT/rlO2SWsABKX/SdhR2YnbjwKBR4ZsbjQeBMQQvow2kD522NBCzyJkQn8pi
+          AWqGVurtl0fPjBXZEPbmKV0p88NGr4/ECPT2tB9rkQe7rms9Vjzcvh116m2d1mi/
+          jKLfnl1NzPQRGINVqE+WqHF5C2TUHYzzU1HNuL0iG35eX81spP/V29AYIhniJEnE
+          QGTzJoscve6xTZDZJxQy3iD+38z9059/BqYJetoxGSNNuv/PC+2ia5PRdotDwoNs
+          H5DAabxYA3LsRA9gg/dGFiCPzMWMHizU9rXnhR38rGgwqWgPCBbJvRuxD98A2wF6
+          LCMRcSWxEmC19UQqrVZ56pRsjNEzMNZOpfonaCi2rhrT8bRUkCZ8awK9WyoDyNni
+          NMScy9xl1o/EhdFaFUgs/fJLNk6mpZTc/fFisOrohn2dDz1PFWbV2/Q/t/4tnKzW
+          pyFYNI2Bw8KtrlLmE4Hu/ba9mCLcQPIx93yPv+9LMD/+0NMpwA8liS5jIdGxlvX5
+          960PXs8wtSY4XQXQ62GS4VBEYKlAUzdBDv+S63kyn8gnbFc4SdEH8NViMn+myp0J
+          NztHRkUCD6knZbN7wMDxFcUCAwEAAQ==
+          -----END PUBLIC KEY-----
+      keys:
+        # TODO: Replace the KMS key with one provisioned by terraform
+        # (when https://jira.bit.admin.ch/browse/DST-4722 is done)
+        jme-process-archive-example-key:
+          key-arn: "arn:aws:kms:eu-central-2:654654230768:key/0b925dc2-b1d0-4678-aac3-39d098280d78"
+  ###
+  # Note: In a real environment, it is recommended to get the Kafka configuration properties from AWS AppConfig.
+  # The properties are shown here only to provide a complete example.
+  # All Kafka properties below are system-wide configuration entries. The service-specific authorization happens
+  # via the IAM role assigned to the ECS task, and does not need any specific configuration entries.
+  ###
+  messaging:
+    kafka:
+      systemName: jme
+      cluster:
+        other:
+          defaultCluster: true
+          bootstrapServers: "${aws.services.kafka.bootstrapServers}"
+          aws:
+            glue:
+              registryName: ${aws.services.glue.registryName}
+              region: "${aws.services.glue.region}"
+              assume-iam-role-arn: "${aws.services.glue.roleArn}"
+            msk:
+              iamAuthEnabled: true
+              region: "${AWS_REGION}"
+              assume-iam-role-arn: "${aws.services.kafka.roleArn}"
+
+
+decree-document.archive.uri: "https://internal-csp.jme-dev.nivel.bazg.admin.ch/jme-process-archive-resource-service/api/archive/decreedocuments/{id}"
+diagram.archive.uri: "https://internal-csp.jme-dev.nivel.bazg.admin.ch/jme-process-archive-resource-service/api/diagrams/{id}/archival?version={version}"

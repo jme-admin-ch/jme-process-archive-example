@@ -1,0 +1,5 @@
+# This is a known false positive that has been reported in similar cases.
+# Trivy falsely reports a vulnerability in commons-io-2.8.0, although commons-io-2.16.1 is being used.
+# See: https://github.com/aquasecurity/trivy/discussions/7673
+# The dependency is not findable in the maven dependency tree.
+CVE-2024-47554

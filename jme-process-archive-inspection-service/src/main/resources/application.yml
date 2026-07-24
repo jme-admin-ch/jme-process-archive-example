@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    vault:
+      enabled: true
+  application:
+    name: jme-process-archive-inspection-service
+
+server:
+  servlet:
+    context-path: /${spring.application.name}
+
+jeap:
+  crypto:
+    awskms:
+      enabled: false
+  vault:
+    system-name: jme
+  web:
+    tls:
+      enabled: false

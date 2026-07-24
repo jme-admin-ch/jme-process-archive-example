@@ -1,0 +1,32 @@
+server:
+  port: 8082
+
+springdoc:
+  group-configs:
+    - group: example-resource-api
+      display-name: Example Resource API
+      paths-to-match:
+        - /api/**
+        - /jme-process-archive-resource-service/api/**
+      packages-to-scan:
+        - ch.admin.bit.jeap.jme.processarchive.resource.web
+  swagger-ui:
+    oauth:
+      client-id: jme-process-archive-it-client
+
+jeap:
+  swagger:
+    status: open
+  security:
+    oauth2:
+      resourceserver:
+        authorization-server:
+          issuer: "http://localhost:8081/jme-process-archive-auth-scs"
+          jwk-set-uri: "${jeap.security.oauth2.resourceserver.authorization-server.issuer}/.well-known/jwks.json"
+  messaging:
+    kafka:
+      bootstrapServers: "http://localhost:12000"
+      schemaRegistryUrl: "http://localhost:13000"
+      username: broker-user
+      password: broker-secret
+      securityProtocol: SASL_PLAINTEXT
