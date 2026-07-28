@@ -61,6 +61,13 @@ Apache License Version 2.0
  * ch.admin.bit.jeap:jeap-spring-boot-web-config-starter - [ch.admin.bit.jeap:jeap-spring-boot-web-config-starter](https://github.com/jeap-admin-ch/jeap-spring-boot-starters/tree/main/jeap-spring-boot-web-config-starter)
  * jme-process-archive-events - [ch.admin.bit.jeap:jme-process-archive-events](https://github.com/jme-admin-ch/jme-process-archive-example/tree/main/jme-process-archive-events)
  * ch.admin.bit.jeap.jme:jme-spring-boot-integration-test - [ch.admin.bit.jeap.jme:jme-spring-boot-integration-test](https://github.com/jme-admin-ch/jme-integration-test/tree/main/jme-spring-boot-integration-test)
+ * ch.admin.bit.jeap.jme.archivetype.jme:decree-document-v1 - [ch.admin.bit.jeap.jme.archivetype.jme:decree-document-v1](https://github.com/jeap-admin-ch/jme-archive-type-registry/tree/main)
+ * ch.admin.bit.jeap.jme.archivetype.jme:decree-summary-v1 - [ch.admin.bit.jeap.jme.archivetype.jme:decree-summary-v1](https://github.com/jeap-admin-ch/jme-archive-type-registry/tree/main)
+ * ch.admin.bit.jeap.jme.archivetype.jme:decree-v1 - [ch.admin.bit.jeap.jme.archivetype.jme:decree-v1](https://github.com/jeap-admin-ch/jme-archive-type-registry/tree/main)
+ * ch.admin.bit.jeap.jme.archivetype.jme:decree-v2 - [ch.admin.bit.jeap.jme.archivetype.jme:decree-v2](https://github.com/jeap-admin-ch/jme-archive-type-registry/tree/main)
+ * ch.admin.bit.jeap.jme.archivetype.jme:decree-v3 - [ch.admin.bit.jeap.jme.archivetype.jme:decree-v3](https://github.com/jeap-admin-ch/jme-archive-type-registry/tree/main)
+ * ch.admin.bit.jeap.jme.archivetype.jme:diagram-v1 - [ch.admin.bit.jeap.jme.archivetype.jme:diagram-v1](https://github.com/jeap-admin-ch/jme-archive-type-registry/tree/main)
+ * ch.admin.bit.jeap.jme.archivetype.jme:jme-archivetype-common - [ch.admin.bit.jeap.jme.archivetype.jme:jme-archivetype-common](https://github.com/jeap-admin-ch/jme-archive-type-registry/tree/main)
  * ch.admin.bit.jeap.jme.indextype.jme:jme-decree-document-v1 - [ch.admin.bit.jeap.jme.indextype.jme:jme-decree-document-v1](https://github.com/jme-admin-ch/jme-index-type-registry/tree/master)
  * ch.admin.bit.jeap.jme.indextype.jme:jme-decree-v1 - [ch.admin.bit.jeap.jme.indextype.jme:jme-decree-v1](https://github.com/jme-admin-ch/jme-index-type-registry/tree/master)
  * ch.admin.bit.jeap.jme.messagetype.jme:jme-create-declaration-command - [ch.admin.bit.jeap.jme.messagetype.jme:jme-create-declaration-command](https://github.com/jme-admin-ch/jme-message-type-registry/tree/main)
@@ -71,13 +78,6 @@ Apache License Version 2.0
  * ch.admin.bit.jeap.messagetype._shared:_shared-messaging-common - [ch.admin.bit.jeap.messagetype._shared:_shared-messaging-common](https://github.com/jeap-admin-ch/jeap-message-type-registry/tree/main)
  * ch.admin.bit.jeap.messagetype._shared:shared-archived-artifact-version-created-event - [ch.admin.bit.jeap.messagetype._shared:shared-archived-artifact-version-created-event](https://github.com/jeap-admin-ch/jeap-message-type-registry/tree/main)
  * ch.admin.bit.jeap.messagetype.jeap:create-artifact-command - [ch.admin.bit.jeap.messagetype.jeap:create-artifact-command](https://github.com/jeap-admin-ch/jeap-message-type-registry/tree/main)
- * decree-document-v1 - ch.admin.bit.jeap.jme.archivetype.jme:decree-document-v1
- * decree-summary-v1 - ch.admin.bit.jeap.jme.archivetype.jme:decree-summary-v1
- * decree-v1 - ch.admin.bit.jeap.jme.archivetype.jme:decree-v1
- * decree-v2 - ch.admin.bit.jeap.jme.archivetype.jme:decree-v2
- * decree-v3 - ch.admin.bit.jeap.jme.archivetype.jme:decree-v3
- * diagram-v1 - ch.admin.bit.jeap.jme.archivetype.jme:diagram-v1
- * jme-archivetype-common - ch.admin.bit.jeap.jme.archivetype.jme:jme-archivetype-common
  * AWS SDK for Java - Core - [com.amazonaws:aws-java-sdk-core](https://aws.amazon.com/sdkforjava)
  * AWS Java SDK for AWS STS - [com.amazonaws:aws-java-sdk-sts](https://aws.amazon.com/sdkforjava)
  * JMES Path Query library - [com.amazonaws:jmespath-java](https://aws.amazon.com/sdkforjava)
