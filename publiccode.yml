@@ -1,8 +1,8 @@
 publiccodeYmlVersion: 0.5.0
 name: jme-process-archive-example
 applicationSuite: JME
-softwareVersion: 1.0.0
-releaseDate: 2026-07-24
+softwareVersion: 1.1.0
+releaseDate: 2026-07-28
 url: "https://github.com/jme-admin-ch/jme-process-archive-example.git"
 landingURL: "https://github.com/jme-admin-ch/jme"
 platforms:
