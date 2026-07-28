@@ -4,7 +4,7 @@ This document describes the features demonstrated by the JME Process Archive Exa
 them locally.
 
 > Make sure the Docker Compose infrastructure and all four services described in
-> [README.md](./README.md) are running before executing the examples.
+> [README.md](../README.md) are running before executing the examples.
 
 ## Example artifacts and messages
 

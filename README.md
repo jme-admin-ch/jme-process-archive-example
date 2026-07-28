@@ -15,7 +15,7 @@ It contains the following modules:
 
 The example covers event-carried state transfer, event notification, versioned and unversioned artifacts, JSON and
 Avro payloads, encryption, multiple artifacts per event, archive conditions, backfill, and archive inspection. See
-[ARCHIVE-EXAMPLES.md](./ARCHIVE-EXAMPLES.md) for the detailed feature descriptions and step-by-step examples.
+[ARCHIVE-EXAMPLES.md](./docs/ARCHIVE-EXAMPLES.md) for the detailed feature descriptions and step-by-step examples.
 
 ## Changes
 
@@ -93,7 +93,8 @@ curl --header "Content-Type: application/json" --request PUT \
 ```
 
 The Process Archive Service consumes the resulting messages and archives the corresponding artifacts. For the complete
-walkthrough, including backfill and inspection endpoints, see [ARCHIVE-EXAMPLES.md](./ARCHIVE-EXAMPLES.md).
+walkthrough, including backfill and inspection endpoints, see
+[ARCHIVE-EXAMPLES.md](./docs/ARCHIVE-EXAMPLES.md).
 
 ## Profiles
 
