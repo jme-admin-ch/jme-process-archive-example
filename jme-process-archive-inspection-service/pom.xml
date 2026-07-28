@@ -7,7 +7,7 @@
     <parent>
         <groupId>ch.admin.bit.jeap</groupId>
         <artifactId>jme-process-archive-example</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>jme-process-archive-inspection-service</artifactId>
@@ -57,7 +57,7 @@
         </dependency>
 
         <dependency>
-            <groupId>ch.admin.bit.jme.archivetype.jme</groupId>
+            <groupId>ch.admin.bit.jeap.jme.archivetype.jme</groupId>
             <artifactId>decree-document-v1</artifactId>
             <version>1</version>
         </dependency>

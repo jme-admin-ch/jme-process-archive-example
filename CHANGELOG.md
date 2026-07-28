@@ -5,7 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 24.07.2026
+## [1.1.0] - 2026-07-28
+
+### Changed
+- Updated artifact group IDs archive types to `ch.admin.jeap.jme.processarchive`.
+
+## [1.0.0] - 2026-07-24
 
 ### Changed
 - Initial OSS version

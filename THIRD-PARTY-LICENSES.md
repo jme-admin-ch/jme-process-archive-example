@@ -71,13 +71,13 @@ Apache License Version 2.0
  * ch.admin.bit.jeap.messagetype._shared:_shared-messaging-common - [ch.admin.bit.jeap.messagetype._shared:_shared-messaging-common](https://github.com/jeap-admin-ch/jeap-message-type-registry/tree/main)
  * ch.admin.bit.jeap.messagetype._shared:shared-archived-artifact-version-created-event - [ch.admin.bit.jeap.messagetype._shared:shared-archived-artifact-version-created-event](https://github.com/jeap-admin-ch/jeap-message-type-registry/tree/main)
  * ch.admin.bit.jeap.messagetype.jeap:create-artifact-command - [ch.admin.bit.jeap.messagetype.jeap:create-artifact-command](https://github.com/jeap-admin-ch/jeap-message-type-registry/tree/main)
- * decree-document-v1 - ch.admin.bit.jme.archivetype.jme:decree-document-v1
- * decree-summary-v1 - ch.admin.bit.jme.archivetype.jme:decree-summary-v1
- * decree-v1 - ch.admin.bit.jme.archivetype.jme:decree-v1
- * decree-v2 - ch.admin.bit.jme.archivetype.jme:decree-v2
- * decree-v3 - ch.admin.bit.jme.archivetype.jme:decree-v3
- * diagram-v1 - ch.admin.bit.jme.archivetype.jme:diagram-v1
- * jme-archivetype-common - ch.admin.bit.jme.archivetype.jme:jme-archivetype-common
+ * decree-document-v1 - ch.admin.bit.jeap.jme.archivetype.jme:decree-document-v1
+ * decree-summary-v1 - ch.admin.bit.jeap.jme.archivetype.jme:decree-summary-v1
+ * decree-v1 - ch.admin.bit.jeap.jme.archivetype.jme:decree-v1
+ * decree-v2 - ch.admin.bit.jeap.jme.archivetype.jme:decree-v2
+ * decree-v3 - ch.admin.bit.jeap.jme.archivetype.jme:decree-v3
+ * diagram-v1 - ch.admin.bit.jeap.jme.archivetype.jme:diagram-v1
+ * jme-archivetype-common - ch.admin.bit.jeap.jme.archivetype.jme:jme-archivetype-common
  * AWS SDK for Java - Core - [com.amazonaws:aws-java-sdk-core](https://aws.amazon.com/sdkforjava)
  * AWS Java SDK for AWS STS - [com.amazonaws:aws-java-sdk-sts](https://aws.amazon.com/sdkforjava)
  * JMES Path Query library - [com.amazonaws:jmespath-java](https://aws.amazon.com/sdkforjava)
