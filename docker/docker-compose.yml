@@ -50,13 +50,13 @@ services:
       - rustfs-data:/data
 
   rustfs-volume-permission-helper:
-    image: alpine:3.22.2
+    image: alpine:3.24.2
     volumes:
       - rustfs-data:/data
     command: sh -c "chown -R 10001:10001 /data"
 
   createbucket:
-    image: amazon/aws-cli:2.32.16
+    image: amazon/aws-cli:2.36.48
     depends_on:
       rustfs:
         condition: service_healthy
@@ -107,7 +107,7 @@ services:
       start_period: 90s
 
   jme-process-archive-service-vault-server:
-    image: hashicorp/vault:1.21.4
+    image: hashicorp/vault:2.1.1
     ports:
       - "8200:8200"
     environment:
@@ -117,7 +117,7 @@ services:
         VAULT_LOCAL_CONFIG={"disable_mlock": true}
 
   jme-process-archive-service-vault-client:
-    image: hashicorp/vault:1.21.4
+    image: hashicorp/vault:2.1.1
     links:
       - jme-process-archive-service-vault-server
     depends_on:
@@ -143,7 +143,7 @@ services:
   ############################################
 
   broker:
-    image: confluentinc/cp-kafka:8.2.0
+    image: confluentinc/cp-kafka:8.3.2
     hostname: broker
     ports:
       - "12000:12000"
@@ -170,7 +170,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   broker-init:
-    image: confluentinc/cp-kafka:8.2.0
+    image: confluentinc/cp-kafka:8.3.2
     # Stays running after the config command finishes, and only reports healthy once it has actually
     # completed - see the comment on jme-process-archive-service-vault-client.
     command: "bash -c \"kafka-configs --bootstrap-server broker:29092 --alter --add-config 'SCRAM-SHA-512=[password=broker-secret]' --entity-type users --entity-name broker-user && touch /tmp/broker-init-ready && tail -f /dev/null\""
@@ -184,7 +184,7 @@ services:
       start_period: 90s
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:8.2.0
+    image: confluentinc/cp-schema-registry:8.3.2
     hostname: schema-registry
     depends_on:
       broker:
