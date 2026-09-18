@@ -1,7 +1,9 @@
 package ch.admin.bit.jeap.jme.processarchive.service.condition;
 
 import ch.admin.bit.jeap.jme.processarchive.event.JmeDiagramVersionCreatedEventBuilder;
+import ch.admin.bit.jeap.messaging.avro.security.AvroClassSecurity;
 import ch.admin.bit.jme.diagram.JmeDiagramVersionCreatedEvent;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,6 +14,13 @@ class ArchiveDiagramConditionTest {
     private static final int VERSION = 1;
 
     private final ArchiveDiagramCondition condition = new ArchiveDiagramCondition();
+
+    @BeforeAll
+    static void installAvroClassWhitelist() {
+        // No Spring context installs the Avro class whitelist here, and Avro refuses to resolve any class from a
+        // schema that is not trusted. The message types used below are covered by the default whitelist.
+        AvroClassSecurity.installDefaultIfMissing();
+    }
 
     @Test
     void isArchiveDataForMessage_regularDiagramId_returnsTrue() {

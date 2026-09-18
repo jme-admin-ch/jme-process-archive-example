@@ -1,6 +1,7 @@
 package ch.admin.bit.jeap.jme.processarchive.service.provider;
 
 import ch.admin.bit.jeap.jme.processarchive.event.JmeDecreeCreatedEventBuilder;
+import ch.admin.bit.jeap.messaging.avro.security.AvroClassSecurity;
 import ch.admin.bit.jeap.processarchive.plugin.api.archivedata.ArchiveData;
 import ch.admin.bit.jeap.processarchive.test.decree.v3.Decree;
 import ch.admin.bit.jme.decree.JmeDecreeCreatedEvent;
@@ -9,6 +10,7 @@ import org.apache.avro.io.BinaryDecoder;
 import org.apache.avro.io.DatumReader;
 import org.apache.avro.io.DecoderFactory;
 import org.apache.avro.specific.SpecificDatumReader;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.ZonedDateTime;
@@ -22,6 +24,13 @@ class DecreeCreatedDataProviderTest {
     private static final String DECREE_TITLE = "test title";
     private static final String DECREE_DATA = "some test data";
     private static final ZonedDateTime DECREE_CREATED_AT = ZonedDateTime.now();
+
+    @BeforeAll
+    static void installAvroClassWhitelist() {
+        // No Spring context installs the Avro class whitelist here, and Avro refuses to resolve any class from a
+        // schema that is not trusted. The message types used below are covered by the default whitelist.
+        AvroClassSecurity.installDefaultIfMissing();
+    }
 
     @Test
     void testGetArchiveData() {

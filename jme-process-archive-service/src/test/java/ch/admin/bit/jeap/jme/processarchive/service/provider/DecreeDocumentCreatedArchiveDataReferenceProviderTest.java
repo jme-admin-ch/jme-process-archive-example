@@ -1,8 +1,10 @@
 package ch.admin.bit.jeap.jme.processarchive.service.provider;
 
 import ch.admin.bit.jeap.jme.processarchive.event.JmeDecreeDocumentCreatedEventBuilder;
+import ch.admin.bit.jeap.messaging.avro.security.AvroClassSecurity;
 import ch.admin.bit.jeap.processarchive.plugin.api.archivedata.ArchiveDataReference;
 import ch.admin.bit.jme.decree.JmeDecreeDocumentCreatedEvent;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,6 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DecreeDocumentCreatedArchiveDataReferenceProviderTest {
 
     private static final String DECREE_DOCUMENT_ID = "1234567890";
+
+    @BeforeAll
+    static void installAvroClassWhitelist() {
+        // No Spring context installs the Avro class whitelist here, and Avro refuses to resolve any class from a
+        // schema that is not trusted. The message types used below are covered by the default whitelist.
+        AvroClassSecurity.installDefaultIfMissing();
+    }
 
     @Test
     void testGetReference() {
