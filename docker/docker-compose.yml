@@ -56,7 +56,7 @@ services:
     command: sh -c "chown -R 10001:10001 /data"
 
   createbucket:
-    image: amazon/aws-cli:2.36.50
+    image: amazon/aws-cli:2.37.0
     depends_on:
       rustfs:
         condition: service_healthy
