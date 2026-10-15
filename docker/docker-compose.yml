@@ -107,7 +107,7 @@ services:
       start_period: 90s
 
   jme-process-archive-service-vault-server:
-    image: hashicorp/vault:2.1.2
+    image: hashicorp/vault:2.2.0
     ports:
       - "8200:8200"
     environment:
@@ -117,7 +117,7 @@ services:
         VAULT_LOCAL_CONFIG={"disable_mlock": true}
 
   jme-process-archive-service-vault-client:
-    image: hashicorp/vault:2.1.2
+    image: hashicorp/vault:2.2.0
     links:
       - jme-process-archive-service-vault-server
     depends_on:
