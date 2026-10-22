@@ -50,13 +50,13 @@ services:
       - rustfs-data:/data
 
   rustfs-volume-permission-helper:
-    image: alpine:3.24.2
+    image: alpine:3.24.3
     volumes:
       - rustfs-data:/data
     command: sh -c "chown -R 10001:10001 /data"
 
   createbucket:
-    image: amazon/aws-cli:2.38.4
+    image: amazon/aws-cli:2.38.5
     depends_on:
       rustfs:
         condition: service_healthy
@@ -107,7 +107,7 @@ services:
       start_period: 90s
 
   jme-process-archive-service-vault-server:
-    image: hashicorp/vault:2.2.0
+    image: hashicorp/vault:2.2.1
     ports:
       - "8200:8200"
     environment:
@@ -117,7 +117,7 @@ services:
         VAULT_LOCAL_CONFIG={"disable_mlock": true}
 
   jme-process-archive-service-vault-client:
-    image: hashicorp/vault:2.2.0
+    image: hashicorp/vault:2.2.1
     links:
       - jme-process-archive-service-vault-server
     depends_on:
