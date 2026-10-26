@@ -41,7 +41,6 @@ Apache License Version 2.0
  * ch.admin.bit.jeap:jeap-process-archive-domain - [ch.admin.bit.jeap:jeap-process-archive-domain](https://github.com/jeap-admin-ch/jeap-process-archive-service/tree/main/jeap-process-archive-domain)
  * ch.admin.bit.jeap:jeap-process-archive-plugin-api - [ch.admin.bit.jeap:jeap-process-archive-plugin-api](https://github.com/jeap-admin-ch/jeap-process-archive-service/tree/main/jeap-process-archive-plugin-api)
  * ch.admin.bit.jeap:jeap-process-archive-reader - [ch.admin.bit.jeap:jeap-process-archive-reader](https://github.com/jeap-admin-ch/jeap-process-archive-reader/tree/main)
- * ch.admin.bit.jeap:jeap-process-archive-reader - [ch.admin.bit.jeap:jeap-process-archive-reader](https://github.com/jeap-admin-ch/jeap-process-archive-reader/tree/main)
  * ch.admin.bit.jeap:jeap-process-archive-remote-data-provider - [ch.admin.bit.jeap:jeap-process-archive-remote-data-provider](https://github.com/jeap-admin-ch/jeap-process-archive-service/tree/main/jeap-process-archive-remote-data-provider)
  * ch.admin.bit.jeap:jeap-process-archive-service - [ch.admin.bit.jeap:jeap-process-archive-service](https://github.com/jeap-admin-ch/jeap-process-archive-service/tree/main/jeap-process-archive-service)
  * ch.admin.bit.jeap:jeap-process-archive-web - [ch.admin.bit.jeap:jeap-process-archive-web](https://github.com/jeap-admin-ch/jeap-process-archive-service/tree/main/jeap-process-archive-web)
