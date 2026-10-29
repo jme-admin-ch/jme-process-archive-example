@@ -11,3 +11,8 @@ oauth-mock-data:
       client-secret: "{noop}secret"
       context: "SYS"
       userroles: ["jme_@searchitem_#read", "jme_@backfilljob_#write", "jme_@backfilljob_#read"]
+      audience:
+        - "https://resources.jme.admin.ch/jme/jme-process-archive-service"
+
+mockserver:
+  introspection-endpoint-audience-check: "on"
