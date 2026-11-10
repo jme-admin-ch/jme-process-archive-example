@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.25.0] - 2026-11-10
+
+### Dependencies
+- **ch.admin.bit.jeap:jeap-spring-boot-parent**: 41.34.0 → 41.35.0 (minor)
+- **ch.admin.bit.jeap:jeap-process-archive-plugin-api**: 24.19.3 → 24.20.0 (minor)
+- **ch.admin.bit.jeap:jeap-process-archive-web**: 24.19.3 → 24.20.0 (minor)
+- **ch.admin.bit.jeap:jeap-process-archive-adapter-opensearch**: 24.19.3 → 24.20.0 (minor)
+- **ch.admin.bit.jeap:jeap-process-archive-adapter-db**: 24.19.3 → 24.20.0 (minor)
+- **ch.admin.bit.jeap:jeap-process-archive-service**: 24.19.3 → 24.20.0 (minor)
+- **ch.admin.bit.jeap:jeap-process-archive-reader**: 9.18.1 → 9.19.0 (minor)
+- **ch.admin.bit.jeap:jeap-oauth-mock-server**: 11.15.2 → 11.16.0 (minor)
+
 ## [4.24.0] - 2026-11-08
 
 ### Dependencies
