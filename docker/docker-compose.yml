@@ -50,13 +50,13 @@ services:
       - rustfs-data:/data
 
   rustfs-volume-permission-helper:
-    image: alpine:3.24.3
+    image: alpine:3.24.4
     volumes:
       - rustfs-data:/data
     command: sh -c "chown -R 10001:10001 /data"
 
   createbucket:
-    image: amazon/aws-cli:2.40.0
+    image: amazon/aws-cli:2.40.1
     depends_on:
       rustfs:
         condition: service_healthy
