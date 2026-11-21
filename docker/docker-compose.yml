@@ -21,7 +21,7 @@ x-rustfs-common: &rustfs-common
 
 services:
   postgres:
-    image: postgres:18-alpine
+    image: postgres:19-alpine
     hostname: postgres
     ports:
       - "5432:5432"
@@ -56,7 +56,7 @@ services:
     command: sh -c "chown -R 10001:10001 /data"
 
   createbucket:
-    image: amazon/aws-cli:2.41.2
+    image: amazon/aws-cli:2.42.0
     depends_on:
       rustfs:
         condition: service_healthy
