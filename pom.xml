@@ -34,13 +34,13 @@
     </parent>
 
     <artifactId>jme-process-archive-example</artifactId>
-    <version>4.39.0-SNAPSHOT</version>
+    <version>4.40.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
-        <jeap-process-archive-service.version>24.26.0</jeap-process-archive-service.version>
+        <jeap-process-archive-service.version>24.27.0</jeap-process-archive-service.version>
         <jeap-process-archive-reader.version>9.25.0</jeap-process-archive-reader.version>
-        <jeap-oauth-mock-server.version>11.21.0</jeap-oauth-mock-server.version>
+        <jeap-oauth-mock-server.version>11.22.0</jeap-oauth-mock-server.version>
         <jme-spring-boot-integration-test.version>8.14.0</jme-spring-boot-integration-test.version>
         <maven.javadoc.skip>true</maven.javadoc.skip>
     </properties>
